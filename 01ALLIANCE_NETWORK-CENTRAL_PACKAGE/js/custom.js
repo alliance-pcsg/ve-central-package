@@ -10,7 +10,7 @@
 *   Toggle advanced search in mobile display (updated 2018-10-09)
 *   Favorite signin warning (updated 2020-03-11)
 *   Enlarge Covers (Updated 2021-12-06)
-*   Text a Call Number (Added 2020-07-24)
+*   Text a Call Number (Updated 2021-12-06)
 *   External Search (Added 2020-07-24)
 *   Force Login (Added 2020-10-22)
 *   eShelf Links (Added 2020-11-03)
@@ -526,88 +526,36 @@ angular
           var vid = '';
           var mms_id = '';
           var show_sms = false;
-          var pnx = $scope.$parent.$parent.$ctrl.item.pnx;
+          var item = $scope.$ctrl.prmActionCtrl.item;
           
           // Remove action if it exists from a previous record
           customActions.removeAction({name: 'sms_action'}, _this.prmActionCtrl);
           
-          // If a single PNX is defined, add the action
-          if (!angular.isUndefined(pnx)) {
-            // Get available institutions
-            var availinstitution = pnx.display.availinstitution;
-            if (!angular.isUndefined(availinstitution)) {
-              
-              // Get vid
-              var vid = angular.uppercase($location.search().vid);
-              
-              // Get institution code
-              var institution = vid;
-              if (angular.isDefined(smsActionOptions.institution) && smsActionOptions.institution != '') {
-                institution = smsActionOptions.institution;
-              }
-              
-              // Continue if this institution has availability
-              var available = false;
-              for (var i=0; i < availinstitution.length; i++) {
-                if (availinstitution[i].indexOf('$$I' + institution + '$$') != -1) {
-                  available = true;
-                }
-              }
-              if (available == true) {
-                
-                // Get title
-                var title = encodeURIComponent(pnx.display.title[0]);
-                
-                // Get MMS ID
-                var mms_id = '';
-                var lds04 = pnx.display.lds04;
-                if (!angular.isUndefined(lds04)) {
-                  var loc_start = 0;
-                  var loc = '';
-                  for (var m=0; m < lds04.length; m++) {
-                    loc_start = lds04[m].indexOf('$$I');
-                    loc = lds04[m].substr(loc_start);
-                    if (loc == '$$I' + vid) {
-                      mms_id = lds04[m].substr(0, loc_start);
-                    }
-                  }
-                }
-                
-                // Get holdings
-                var holdings = new Array();
-                var availlibrary = pnx.display.availlibrary;
-                for (var h = 0; h < availlibrary.length; h++) {
-                  var holding = availlibrary[h];
-                  if (holding.indexOf('$$I' + institution + '$$') != -1) {
-                    var split_holding = holding.split('$$');
-                    for (var s = 0; s < split_holding.length; s++) {
-                      var sub = split_holding[s];
-                      var sub_value = sub.substring(1);
-                      switch (sub.charAt(0)) {
-                        case '1':
-                          var library_location = sub_value;
-                        break;
-                        case '2':
-                          var call_number = sub_value;
-                        break;
-                        case 'Y':
-                          var library_code = sub_value;
-                        break;
-                        default:
-                          // Do nothing
-                      }
-                    }
-                    holdings.push(library_code + ';' + library_location + ';' + call_number);
-                  }
-                }
-                var joined_holdings = encodeURIComponent(holdings.join('|'));
-
-                // If holdings were set successfully, set show_sms to true
-                if (holdings.length > 0) {
-                  show_sms = true;
-                }
-              }
+          // If a holding is defined, add the action
+          if (!(angular.isUndefined(item.delivery.holding) || item.delivery.holding === null) && item.delivery.holding.length > 0) {
+            
+            // Get VID
+            var inst_vid = angular.uppercase($location.search().vid);
+            var vid = inst_vid.substring(inst_vid.indexOf(':')+1);
+ 
+            // Get title
+            var title = encodeURIComponent(item.pnx.display.title[0]);
+            
+            // Get MMS ID
+            var mms_id = item.pnx.display.mms[0];
+            
+            // Get holdings
+            var holdings = new Array();
+            for (var h = 0; h < item.delivery.holding.length; h++) {
+              var holding = item.delivery.holding[h];
+              holdings.push(holding.libraryCode + ';' + holding.subLocation + ';' + holding.callNumber);
             }
+            var joined_holdings = encodeURIComponent(holdings.join('|'));
+
+            // If holdings were set successfully, set show_sms to true
+            if (holdings.length > 0) {
+              show_sms = true;
+            }  
             
             // Add action if show_sms is true
             if (show_sms) {
