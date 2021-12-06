@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2021-10-21
+*	Last updated: 2021-12-06
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -22,6 +22,9 @@
   'use strict';
 
   var app = angular.module('centralCustom', ['angularLoad']);
+  
+  /* Temporary placeholder toggleInstitutions module to prevent local packages from breaking */
+  angular.module('toggleInstitutions', []);
 
 /* Custom action Begins */
   
