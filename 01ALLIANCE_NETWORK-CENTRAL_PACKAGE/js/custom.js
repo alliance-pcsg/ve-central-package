@@ -189,7 +189,7 @@ angular
       
       // Initialization
       this.$onInit = function () {
-        this.view_code = $location.search().vid;
+        this.view_code = $location.search().vid.replace(':', '-');
         this.infoIcon = badgeOptions.info_icon;
         this.inBadges = false;
         var icon_definition = $scope.$parent.$parent.$ctrl.iconDefinition;
