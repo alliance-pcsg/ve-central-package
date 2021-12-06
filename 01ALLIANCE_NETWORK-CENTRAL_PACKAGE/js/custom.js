@@ -4,7 +4,6 @@
 *	Last updated: 2021-10-21
 *	
 * Included customizations:
-*   Hide/show Summit institutions (updated 2018-07-01)
 *   Insert custom action (updated 2018-11-07)
 *   Custom model window for peer-review and open access badges (updated 2019-12-26)
 *   Toggle advanced search in mobile display (updated 2018-10-09)
@@ -166,45 +165,6 @@ angular.module('customActions').factory('customActions', function () {
 
  
 /* Custom action Ends */
-
-/*
-* Toggle institutions (hide/show summit libraries)
-* https://github.com/alliance-pcsg/primo-explore-toggle-institutions
-*/
-
-angular
-  .module('toggleInstitutions', [])
-  .component('toggleInstitutions', {
-      bindings: {
-          startHidden: '<'
-      },
-      template: '<md-button class="md-raised" ng-click="$ctrl.toggleLibs()" id="summitButton" aria-controls="summitLinks" aria-expanded=false aria-label="Show/Hide Summit Libraries"> {{$ctrl.showLibs ? hide_label : show_label}} <span aria-hidden=true>{{$ctrl.showLibs ? "&laquo;" : "&raquo;"}}</span></md-button>',
-      controller: ['$scope', 'showHideMoreInstOptions', function ($scope, showHideMoreInstOptions) {
-          this.$onInit = function () {
-              if (showHideMoreInstOptions.default_state == 'hidden') this.showLibs = this.startHidden === false ? true : false
-              if (showHideMoreInstOptions.default_state == 'visible') this.showLibs = this.startHidden === false ? true : true
-              this.button = angular.element(document.querySelector('prm-alma-more-inst-after button'))
-              this.tabs = angular.element(document.querySelector('prm-alma-more-inst md-tabs'))
-              this.tabs.attr('id', 'summitLinks')
-              this.button.parent().after(this.tabs)
-              if (!this.showLibs) this.tabs.addClass('hide')
-
-              $scope.show_label = showHideMoreInstOptions.show_label;
-              $scope.hide_label = showHideMoreInstOptions.hide_label;
-          }
-          this.toggleLibs = function () {
-              this.showLibs = !this.showLibs
-              this.tabs.hasClass('hide') ?
-              this.tabs.removeClass('hide') && this.button.attr('aria-expanded', true) :
-              this.tabs.addClass('hide') && this.button.attr('aria-expanded', false)
-          }
-      }]
-  })
-angular.module('toggleInstitutions').value('showHideMoreInstOptions', {
-    default_state: 'hidden',
-    show_label: 'Show Summit Libraries',
-    hide_label: 'Hide Summit Libraries'
-}); /* hide/show */
 
 // Begin Badges modal module
 angular
