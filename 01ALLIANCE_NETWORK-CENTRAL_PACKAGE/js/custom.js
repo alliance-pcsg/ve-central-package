@@ -522,14 +522,11 @@ angular
         var _this = this;
         this.$onInit = function () {
           
-          // Set defaults;
-          var vid = '';
-          var mms_id = '';
-          var show_sms = false;
-          var item = $scope.$ctrl.prmActionCtrl.item;
-          
           // Remove action if it exists from a previous record
           customActions.removeAction({name: 'sms_action'}, _this.prmActionCtrl);
+          
+          // Get item from control
+          var item = $scope.$ctrl.prmActionCtrl.item;
           
           // If a holding is defined, add the action
           if (!(angular.isUndefined(item.delivery.holding) || item.delivery.holding === null) && item.delivery.holding.length > 0) {
@@ -552,14 +549,8 @@ angular
             }
             var joined_holdings = encodeURIComponent(holdings.join('|'));
 
-            // If holdings were set successfully, set show_sms to true
+            // If holdings were set successfully, add action
             if (holdings.length > 0) {
-              show_sms = true;
-            }  
-            
-            // Add action if show_sms is true
-            if (show_sms) {
-              // Define action
               _this.sms_action = {
                 name: 'sms_action',
                 label: smsActionOptions.label,
