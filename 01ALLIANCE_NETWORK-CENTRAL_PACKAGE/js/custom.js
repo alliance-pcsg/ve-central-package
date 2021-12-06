@@ -9,7 +9,7 @@
 *   Custom model window for peer-review and open access badges (updated 2019-12-26)
 *   Toggle advanced search in mobile display (updated 2018-10-09)
 *   Favorite signin warning (updated 2020-03-11)
-*   Enlarge Covers (Added 2020-03-11)
+*   Enlarge Covers (Updated 2021-12-06)
 *   Text a Call Number (Added 2020-07-24)
 *   External Search (Added 2020-07-24)
 *   Force Login (Added 2020-10-22)
@@ -486,9 +486,9 @@ angular
           
           // Get thumbnail URL and modify for large image
           if (angular.isDefined($scope.$parent.$parent.$ctrl.selectedThumbnailLink)) {
-            var thumbnail_url = $scope.$parent.$parent.$ctrl.selectedThumbnailLink.linkURL;
+            var thumbnail_url = $scope.$parent.$parent.$ctrl.selectedThumbnailLink.linkURL.toLowerCase();
             if (thumbnail_url.indexOf('syndetics.com') != -1) {
-              this.cover_url = thumbnail_url.replace('SC.JPG', 'LC.JPG');
+              this.cover_url = thumbnail_url.replace('sc.jpg', 'lc.jpg');
             }
             else if (thumbnail_url.indexOf('books.google.com')) {
               this.cover_url = thumbnail_url.replace('zoom=5', 'zoom=1');
