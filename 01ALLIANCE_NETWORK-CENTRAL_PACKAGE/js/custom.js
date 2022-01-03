@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2021-12-06
+*	Last updated: 2022-01-03
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -10,7 +10,7 @@
 *   Favorite signin warning (updated 2020-03-11)
 *   Enlarge Covers (Updated 2021-12-06)
 *   Text a Call Number (Updated 2021-12-06)
-*   External Search (Added 2020-07-24)
+*   External Search (Updated 2022-01-03)
 *   Force Login (Added 2020-10-22)
 *   eShelf Links (Added 2020-11-03)
 *   Hathi Trust Availability (Updated 2021-10-21)
