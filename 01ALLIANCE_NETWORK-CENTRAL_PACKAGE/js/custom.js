@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-01-03
+*	Last updated: 2022-01-06
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -13,7 +13,7 @@
 *   External Search (Updated 2022-01-03)
 *   Force Login (Added 2020-10-22)
 *   eShelf Links (Added 2020-11-03)
-*   Hathi Trust Availability (Updated 2021-10-21)
+*   Hathi Trust Availability (Updated 2022-01-06)
 */
 
 
@@ -832,7 +832,7 @@ angular.module('externalSearch', [])
 //* End eshelf.menu link module *//
 
 
-//* Begin Hathi Trust Availability *//
+﻿//* Begin Hathi Trust Availability *//
 //* Adapted from UMNLibraries primo-explore-hathitrust-availability *//
 //* https://github.com/UMNLibraries/primo-explore-hathitrust-availability *//
 angular
@@ -930,13 +930,14 @@ angular
         controller: function (hathiTrust, hathiTrustAvailabilityOptions) {
             var self = this;
             self.$onInit = function () {
+
                 // copy options from local package or central package defaults
                 self.msg = hathiTrustAvailabilityOptions.msg;
                 self.hideOnline = hathiTrustAvailabilityOptions.hideOnline;
                 self.hideIfJournal = hathiTrustAvailabilityOptions.hideIfJournal;
                 self.ignoreCopyright = hathiTrustAvailabilityOptions.ignoreCopyright;
                 self.entityId = hathiTrustAvailabilityOptions.entityId;
-                self.institutionId = hathiTrustAvailabilityOptions.institutionId;
+                self.excludeNotLocal = hathiTrustAvailabilityOptions.excludeNotLocal;
 
                 if (!self.msg) self.msg = 'Full Text Available at HathiTrust';
 
@@ -951,10 +952,7 @@ angular
                 }
 
                 // prevent appearance iff no holding in this library
-                // get the array of institutions with holdings
-                var allInstitutions = institutions();
-                // check if this institution is in that array, if not, then return before inserting the link
-                if (!allInstitutions.includes(self.institutionId)) {
+                if (self.excludeNotLocal && !isLocal()) {
                     return;
                 }
 
@@ -967,22 +965,42 @@ angular
                 // look for full text at HathiTrust
                 updateHathiTrustAvailability();
             };
-            // query the pnx to get array of institutions with holdings
-            var institutions = function () {
-                var res = self.prmSearchResultAvailabilityLine.result.pnx.delivery.institution;
-                return res;
-            }
 
             var isJournal = function () {
-                var format =
-                    self.prmSearchResultAvailabilityLine.result.pnx.addata.format[0];
-                return !(format.toLowerCase().indexOf('journal') == -1); // format.includes("Journal")
+                if (angular.isDefined(self.prmSearchResultAvailabilityLine.result.pnx.addata.format)) {
+                    var format = self.prmSearchResultAvailabilityLine.result.pnx.addata.format[0];
+                    return !(format.toLowerCase().indexOf('journal') == -1); // format.includes("Journal")
+                }
+                else {
+                    return false;
+                }
             };
 
             var isAvailable = function isAvailable() {
                 var available = self.prmSearchResultAvailabilityLine.result.delivery.availability[0];
                 return (available.toLowerCase().indexOf('unavailable') == -1);
             };
+
+            var isLocal = function () {
+                var availablelocally = false;
+                /* If ebook is available set availablelocally to true */
+                if (self.prmSearchResultAvailabilityLine.result.delivery.availability[0] == 'not_restricted') {
+                    availablelocally = true;
+                }
+                /* If ebook is available by link-in-record set availablelocally to true */
+                else if (self.prmSearchResultAvailabilityLine.result.delivery.availability[0] == 'fulltext_linktorsrc') {
+                    availablelocally = true;
+                }
+                /* If print book is available set availablelocally to true */
+                else if (self.prmSearchResultAvailabilityLine.result.delivery.availability[0] == 'available_in_library') {
+                    availablelocally = true;
+                }
+                /* If print book is owned but unavailable set availablelocally to true */
+                else if (self.prmSearchResultAvailabilityLine.result.delivery.availability == 'unavailable') {
+                    availablelocally = true;
+                }
+                return availablelocally;
+            }
 
             var isOnline = function () {
                 var delivery =
@@ -1058,9 +1076,9 @@ angular
         msg: 'Full Text Available at HathiTrust',
         hideOnline: false,
         hideIfJournal: false,
-        ignoreCopyright: false,
+        ignoreCopyright: true,
         entityId: '',
-        institutionId: 'NZ'
+        excludeNotLocal: true
     });
     //* End Hathi Trust Availability *//
 
