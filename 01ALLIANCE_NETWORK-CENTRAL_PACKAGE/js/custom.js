@@ -1,13 +1,13 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-01-06
+*	Last updated: 2022-01-19
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
 *   Custom model window for peer-review and open access badges (updated 2019-12-26)
 *   Toggle advanced search in mobile display (updated 2018-10-09)
-*   Favorite signin warning (updated 2020-03-11)
+*   Favorite signin warning (updated 2021-01-19)
 *   Enlarge Covers (Updated 2021-12-06)
 *   Text a Call Number (Updated 2021-12-06)
 *   External Search (Updated 2022-01-03)
@@ -416,10 +416,7 @@ angular
 })
 .component('favOverlay', {  //This component is an element that sits over the favorites icon when the modal warning functionality is enabled.
     controller: 'favOverlayCtrl',
-    template: '<div>' +
-				'<button style="cursor: pointer; background: transparent; border: none; width: 41px; height: 41px; margin: -31px 0px 0px -21px; position: absolute" ng-if="$ctrl.isPinIcon" ng-disabled="$ctrl.isFavoritesDisabled()" ng-show="$root.view" ng-click="showFavWarningModal($event); favWarningOnClick()">' +
-        '</button>' +
-			'</div>'
+    template: '<button style="cursor: pointer; background: transparent; border: none; width: 41px; height: 41px; margin: -31px 0px 0px -21px; position: absolute" ng-if="$ctrl.isPinIcon" ng-disabled="$ctrl.isFavoritesDisabled()" ng-show="$root.view" ng-click="showFavWarningModal($event); favWarningOnClick()"></button>'
 });
 
 //* End Favorites signin warning  *//
