@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-02-04
+*	Last updated: 2022-02-07
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -9,7 +9,7 @@
 *   Toggle advanced search in mobile display (updated 2018-10-09)
 *   Favorite signin warning (updated 2021-01-19)
 *   Enlarge Covers (Updated 2021-12-06)
-*   Text a Call Number (Updated 2021-12-06)
+*   Text a Call Number (Updated 2022-02-07)
 *   External Search (Updated 2022-02-04)
 *   Force Login (Added 2020-10-22)
 *   eShelf Links (Added 2020-11-03)
@@ -505,7 +505,7 @@ angular
             var holdings = new Array();
             for (var h = 0; h < item.delivery.holding.length; h++) {
               var holding = item.delivery.holding[h];
-              holdings.push(holding.libraryCode + ';' + holding.subLocation + ';' + holding.callNumber);
+              holdings.push(holding.libraryCode + ';' + holding.subLocation.replace(/;/g,'%3B') + ';' + holding.callNumber);
             }
             var joined_holdings = encodeURIComponent(holdings.join('|'));
 
