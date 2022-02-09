@@ -492,8 +492,7 @@ angular
           if (!(angular.isUndefined(item.delivery.holding) || item.delivery.holding === null) && item.delivery.holding.length > 0) {
             
             // Get VID
-            var inst_vid = angular.uppercase($location.search().vid);
-            var vid = inst_vid.substring(inst_vid.indexOf(':')+1);
+            var vid = angular.uppercase($location.search().vid);
  
             // Get title
             var title = encodeURIComponent(item.pnx.display.title[0]);
