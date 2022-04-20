@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-03-23
+*	Last updated: 2022-04-20
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -15,6 +15,7 @@
 *   eShelf Links (Added 2020-11-03)
 *   Hathi Trust Availability (Updated 2022-01-06)
 *   Availability facet counts (Added 2022-03-23)
+*   Hide Unwanted 856 Links (Added 2022-04-20)
 */
 
 
@@ -1177,5 +1178,29 @@ angular
         msg: '* Counts are approximate. Results may differ.'
     });
   //* End availability counts *//
+  
+  /* Hide unwanted 856 links */
+  app.value('linksToKeep', []).component('prmServiceLinksAfter', {
+  bindings: {
+    parentCtrl: '<'
+  },
+  controller: function controller($document, linksToKeep) {
+    angular.element(function () {
+      if (linksToKeep.length > 0) {
+        var lNodes = $document[0].querySelectorAll("prm-service-links > div > div > div");
+        for (var i = 0; i < lNodes.length; i++) {
+          var eNode = lNodes[i];
+          var span = eNode.querySelector("a > span");
+          if (span != null) {
+            if (!linksToKeep.includes(span.textContent.trim())) {
+              eNode.style.display = "none";
+            }
+          }
+        }
+      }
+    });
+  }
+  //* End unwanted 856 links *//
+});
 
 })();
