@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-04-20
+*	Last updated: 2022-05-23
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -9,7 +9,7 @@
 *   Toggle advanced search in mobile display (updated 2018-10-09)
 *   Favorite signin warning (updated 2021-01-19)
 *   Enlarge Covers (Updated 2021-12-06)
-*   Text a Call Number (Updated 2022-02-07)
+*   Text a Call Number (Updated 2022-05-23)
 *   External Search (Updated 2022-02-04)
 *   Force Login (Added 2020-10-22)
 *   eShelf Links (Added 2020-11-03)
@@ -531,7 +531,7 @@ angular
             // Get form asynchronously
             $http({
               method: "GET",
-              url: 'https://cloud9.orbiscascade.org/sms/form.php?vid=' + vid + '&title=' + title + '&holdings=' + joined_holdings + '&libraries=' + smsActionOptions.libraries
+              url: 'https://pcsg.orbiscascade.org/sms/form.php?vid=' + vid + '&title=' + title + '&holdings=' + joined_holdings + '&libraries=' + smsActionOptions.libraries
             })
             .then(
               function(response) {
@@ -565,7 +565,7 @@ angular
                   // Send request
                   $http({
                     method: 'GET',
-                    url: 'https://cloud9.orbiscascade.org/sms/send.php?vid=' + vid + '&title=' + title + '&mms_id=' + mms_id + '&details=' + smsItemDetails + '&phone=' + $scope.smsPhone + '&provider=' + $scope.smsProvider + '&note=' + smsNote + '&include_link=' + smsLink
+                    url: 'https://pcsg.orbiscascade.org/sms/send.php?vid=' + vid + '&title=' + title + '&mms_id=' + mms_id + '&details=' + smsItemDetails + '&phone=' + $scope.smsPhone + '&provider=' + $scope.smsProvider + '&note=' + smsNote + '&include_link=' + smsLink
                   })
                   .then(
                     // Display confirmation
