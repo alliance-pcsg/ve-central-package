@@ -1207,7 +1207,7 @@ angular
   /* showMmsid testing begin */
   angular
     .module('showMmsid', [])
-    .component('prmServiceDetailsAfter', {
+    .component('showMmsid', {
         bindings: { parentCtrl: '<' },
         controller: function controller($scope, $http, $element, showMmsidOptions) {
             this.$onInit = function() {
