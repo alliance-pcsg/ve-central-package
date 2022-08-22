@@ -15,3 +15,5 @@ Then follow the documentation for the module(s) you wish to use.
 - [eShelf Links](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/add-custom-links-to-the-eshelf-menu/)
 - [HathiTrust Availability](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/hathitrust-availability/)
 - [Availability Facet Counts](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/availability-counts/)
+- [Hide Unwanted 856 Links](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/hide-856-links/)
+- [Show NZ and IZ MMS IDs](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/show-mms-ids/)

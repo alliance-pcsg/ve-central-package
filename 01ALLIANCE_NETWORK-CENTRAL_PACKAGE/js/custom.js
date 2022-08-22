@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-05-23
+*	Last updated: 2022-08-22
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -1204,7 +1204,7 @@ angular
   });
   //* End unwanted 856 links *//
   
-  /* showMmsid testing begin */
+  /* showMmsid begin */
   angular
     .module('showMmsid', [])
     .component('showMmsid', {
@@ -1220,7 +1220,6 @@ angular
               $scope.izLabel=showMmsidOptions.izLabel;
               $scope.nzLabel=showMmsidOptions.nzLabel;
               var srcid=$scope.$parent.$parent.$ctrl.item.pnx.control.sourcerecordid[0];
-              console.log(srcid)
               //srcid is nz mmsid, implies no iz mmsid
               if(srcid.substring(0,2)=="99" && srcid.substring(srcid.length - 4)!=izSuffix){
                 $scope.nzShow=true;
@@ -1293,6 +1292,6 @@ angular
     </div>
     </div>`
     })
-    /* showMmsid testing end */
+    /* showMmsid end */
 
 })();
