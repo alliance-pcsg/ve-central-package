@@ -845,7 +845,7 @@ angular.module('externalSearch', [])
 //* End eshelf.menu link module *//
 
 
-﻿//* Begin Hathi Trust Availability *//
+//* Begin Hathi Trust Availability *//
 //* Adapted from UMNLibraries primo-explore-hathitrust-availability *//
 //* https://github.com/UMNLibraries/primo-explore-hathitrust-availability *//
 angular
