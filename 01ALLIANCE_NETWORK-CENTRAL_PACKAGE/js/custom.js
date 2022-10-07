@@ -1,7 +1,7 @@
 /*
 * 
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-08-22
+*	Last updated: 2022-09-23
 *	
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -13,10 +13,11 @@
 *   External Search (Updated 2022-02-04)
 *   Force Login (Added 2020-10-22)
 *   eShelf Links (Added 2020-11-03)
-*   Hathi Trust Availability (Updated 2022-01-06)
+*   Hathi Trust Availability (Updated 2022-09-23)
 *   Availability facet counts (Added 2022-03-23)
 *   Hide Unwanted 856 Links (Added 2022-04-20)
 *   Show NZ and IZ MMS IDs (Added 2022-08-11)
+*   Set Focus on Hover in Send-To Menu (Added 2022-08-24)
 */
 
 
@@ -844,7 +845,7 @@ angular.module('externalSearch', [])
 //* End eshelf.menu link module *//
 
 
-﻿//* Begin Hathi Trust Availability *//
+//* Begin Hathi Trust Availability *//
 //* Adapted from UMNLibraries primo-explore-hathitrust-availability *//
 //* https://github.com/UMNLibraries/primo-explore-hathitrust-availability *//
 angular
@@ -1032,8 +1033,17 @@ angular
                 return self.entityId ? link + '?signon=swle:' + self.entityId : link;
             };
 
+            // Rewrote logic to filter on presence of (ocolc) prefix PO 20220825
             var isOclcNum = function (value) {
-                return value.match(/^(\(ocolc\))?\d+$/i);
+                const oclcre = /^(\(ocolc\))?\d+$/i;
+                var res = false;
+                var getmatch = value.match(oclcre);
+                if (getmatch) {
+                    if (getmatch[1]) {
+                        res = true;
+                    }
+                }
+                return res;
             };
 
             var updateHathiTrustAvailability = function () {
@@ -1088,11 +1098,10 @@ angular
         msg: 'Full Text Available at HathiTrust',
         hideOnline: false,
         hideIfJournal: false,
-        ignoreCopyright: true,
+        ignoreCopyright: false,
         entityId: '',
         excludeNotLocal: true
     });
-    //* End Hathi Trust Availability *//
 
 /* Add count to availability facet */
 angular
@@ -1293,5 +1302,35 @@ angular
     </div>`
     })
     /* showMmsid end */
+    
+  //* Begin Set Focus on Hover in Send-To Menu *//
+  angular
+      .module('setFocusOnHoverSendTo', [])
+      .component('setFocus', {
+          controller: function ($scope) {
+              this.$onInit = function () {
+                  var parent_ctrl = $scope.$parent.$parent.$ctrl;
+                  if (parent_ctrl.activeAction.length > 0) {
+                      var action_list = parent_ctrl.$element[0];
+                      var interval = setInterval(find_items, 100);
+                      function find_items() {
+                          let items = action_list.getElementsByTagName('button');
+                          if (items.length > 0) {
+                              clearInterval(interval);
+                              for (let i = 0; i < items.length; i++) {
+                                  items[i].addEventListener('mouseenter', function (e) {
+                                      this.focus();
+                                  });
+                                  items[i].addEventListener('mouseleave', function (e) {
+                                      this.blur();
+                                  });
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      })
+      //* End Set Focus on Hover in Send-To Menu *//
 
 })();
