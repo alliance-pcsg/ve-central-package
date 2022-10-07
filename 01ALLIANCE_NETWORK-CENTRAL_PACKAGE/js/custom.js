@@ -1,8 +1,8 @@
 /*
-* 
+*
 *	Orbis Cascade Alliance Central Package
 *	Last updated: 2022-09-23
-*	
+*
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
 *   Custom model window for peer-review and open access badges (updated 2019-12-26)
@@ -26,12 +26,12 @@
   'use strict';
 
   var app = angular.module('centralCustom', ['angularLoad']);
-  
+
   /* Temporary placeholder toggleInstitutions module to prevent local packages from breaking */
   angular.module('toggleInstitutions', []);
 
 /* Custom action Begins */
-  
+
   angular.module('customActions', []);
 
 /* eslint-disable max-len */
@@ -64,7 +64,7 @@ angular.module('customActions').component('customAction', {
                 onToggle: customActions.processLinkTemplate(_this.link, _this.prmActionCtrl.item, _this.target)
             };
             customActions.removeAction(_this.action, _this.prmActionCtrl);
-            customActions.addAction(_this.action, _this.prmActionCtrl);          
+            customActions.addAction(_this.action, _this.prmActionCtrl);
         };
     }]
 });
@@ -168,9 +168,9 @@ angular.module('customActions').factory('customActions', function () {
             };
         }
     };
-}); 
+});
 
- 
+
 /* Custom action Ends */
 
 // Begin Badges modal module
@@ -179,7 +179,7 @@ angular
   .component('badgesModal', {
     template: '<md-button ng-if="$ctrl.inBadges" ng-click="$ctrl.showBadgeInfo($event, $ctrl.view_code, $ctrl.infoFile)" class="badgeButton" aria-label="{{$ctrl.badgeTooltip}}"><md-tooltip>{{$ctrl.badgeTooltip}}</md-tooltip><md-icon md-svg-icon="{{$ctrl.infoIcon}}"></md-icon></md-button>',
     controller: function ($scope, $mdDialog, $location, badgeOptions) {
-      
+
       // Badge types
       this.badgeTypes = [
         {
@@ -193,7 +193,7 @@ angular
           options: badgeOptions.open_access
         }
       ];
-      
+
       // Initialization
       this.$onInit = function () {
         this.view_code = $location.search().vid.replace(':', '-');
@@ -208,7 +208,7 @@ angular
           }
         });
       }
-      
+
       // Badge info dialog
       this.showBadgeInfo = function showBadgeInfo($event, view_code, info_file) {
         $mdDialog.show({
@@ -222,7 +222,7 @@ angular
         }
         $event.stopPropagation();
       }
-      
+
     }
   })
   .value('badgeOptions', {
@@ -236,9 +236,9 @@ angular
       tooltip: 'What is open access?'
     }
   });
-  
+
 // END Badges modal module
-  
+
 
 // Begin Toggle Advanced Fields module //
 angular
@@ -304,7 +304,7 @@ angular.module('toggleAdvancedFields').value('advancedFieldsOptions', {
     show_button_for: 'mobile',
     show_label: 'Show Additional Fields',
     hide_label: 'Hide Additional Fields'
-});  
+});
 
 /* End toggle advanced fields */
 
@@ -443,11 +443,11 @@ angular
             }
           }
         }
-        
+
         this.showLargeCover = function showLargeCover($event) {
           // Prevent page submission
           $event.preventDefault();
-          
+
           // Get thumbnail URL and modify for large image
           if (angular.isDefined($scope.$parent.$parent.$ctrl.selectedThumbnailLink)) {
             var thumbnail_url = $scope.$parent.$parent.$ctrl.selectedThumbnailLink.linkURL.toLowerCase();
@@ -485,25 +485,25 @@ angular
       controller: function controller($scope, $location, $http, $mdDialog, customActions, smsActionOptions) {
         var _this = this;
         this.$onInit = function () {
-          
+
           // Remove action if it exists from a previous record
           customActions.removeAction({name: 'sms_action'}, _this.prmActionCtrl);
-          
+
           // Get item from control
           var item = $scope.$ctrl.prmActionCtrl.item;
-          
+
           // If a holding is defined, add the action
           if (!(angular.isUndefined(item.delivery.holding) || item.delivery.holding === null) && item.delivery.holding.length > 0) {
-            
+
             // Get VID
             var vid = angular.uppercase($location.search().vid);
- 
+
             // Get title
             var title = encodeURIComponent(item.pnx.display.title[0]);
-            
+
             // Get MMS ID
             var mms_id = item.pnx.display.mms[0];
-            
+
             // Get holdings
             var holdings = new Array();
             for (var h = 0; h < item.delivery.holding.length; h++) {
@@ -525,11 +525,11 @@ angular
             }
           }
         }
-        
+
         // SMS dialog
         this.showSmsForm = function showSmsForm(vid, title, mms_id, joined_holdings) {
           return function() {
-            
+
             // Get form asynchronously
             $http({
               method: "GET",
@@ -549,7 +549,7 @@ angular
                 console.log(error_response);
               }
             );
-              
+
             function smsFormController($scope, $mdDialog) {
 
               // Submit form asynchronously
@@ -583,14 +583,14 @@ angular
                   document.getElementById('smsError').style.display = "block";
                 }
               };
-              
+
               // Close form
               $scope.closeSmsForm = function () {
                 $mdDialog.hide();
               };
-              
+
             }
-            
+
           };
         }
       }
@@ -825,19 +825,19 @@ angular.module('externalSearch', [])
               directiveIcon = value.icon;
               var el = '<' + directiveName
                 + ' class="'+ directiveClass + '">'
-                + '<button class="button-with-icon md-button md-primoExplore-theme md-ink-ripple" type="button" aria-label="'                               
+                + '<button class="button-with-icon md-button md-primoExplore-theme md-ink-ripple" type="button" aria-label="'
                 + directiveLabel + '" ng-click="openLink(\'' + directiveLink + '\')">'
                 + '<md-icon md-svg-icon="' + directiveIcon + '"></md-icon>'
                 + '<span class="custom-link">' + directiveText + '</span>'
                 + '</button>'
                 + '</' + directiveName + '">';
               var compiledEl = angular.element($compile(el)($scope));
-              var menu = document.querySelector('custom-directive'); 
-              menu.appendChild(compiledEl[0]);       
-            });    
-          }          
-        }       
-      };      
+              var menu = document.querySelector('custom-directive');
+              menu.appendChild(compiledEl[0]);
+            });
+          }
+        }
+      };
     })
     .value('eShelfOptions', {
       items:[]
@@ -1188,7 +1188,7 @@ angular
         msg: '* Counts are approximate. Results may differ.'
     });
   //* End availability counts *//
-  
+
   /* Hide unwanted 856 links */
   app.value('linksToKeep', []).component('prmServiceLinksAfter', {
     bindings: {
@@ -1212,7 +1212,7 @@ angular
     }
   });
   //* End unwanted 856 links *//
-  
+
   /* showMmsid begin */
   angular
     .module('showMmsid', [])
@@ -1302,7 +1302,7 @@ angular
     </div>`
     })
     /* showMmsid end */
-    
+
   //* Begin Set Focus on Hover in Send-To Menu *//
   angular
       .module('setFocusOnHoverSendTo', [])
@@ -1333,4 +1333,30 @@ angular
       })
       //* End Set Focus on Hover in Send-To Menu *//
 
+
+      //* Begin Same Tab Manu Links *//
+      angular.module('sameTabMenuLinks', []).component('sameTabMenuLinks', {
+        bindings: {parentCtrl: '<'},
+        controller: function controller($document, $scope) {
+          this.$onInit = function() {
+                /*Must wait for menu items to appear*/
+                var elCheck = setInterval(updateLinks, 1000);
+                function updateLinks() {
+                  /* Checks for menu links, sets all target attributes to '_self'*/
+                  if( $document[0].querySelectorAll("div.top-nav-bar-links > div").length>0 ){
+                    var menuItems=$document[0].querySelectorAll("div.top-nav-bar-links > div")
+                    for (var i = 0; i < menuItems.length; i++) {
+                      var mItem = menuItems[i];
+                      var anchor = mItem.querySelector("div > a");
+                      anchor.target="_self"
+                    }
+                    clearInterval(elCheck);
+                  }
+
+                }
+
+              }
+        }
+      });
+      //* End Same Tab Manu Links *//
 })();
