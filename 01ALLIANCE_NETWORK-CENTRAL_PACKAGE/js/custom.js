@@ -18,7 +18,6 @@
 *   Hide Unwanted 856 Links (Added 2022-04-20)
 *   Show NZ and IZ MMS IDs (Added 2022-08-11)
 *   Set Focus on Hover in Send-To Menu (Added 2022-08-24)
-*   Same Tab Menu Links (Added 2022-10-07)
 */
 
 
@@ -1335,29 +1334,5 @@ angular
       //* End Set Focus on Hover in Send-To Menu *//
 
 
-      //* Begin Same Tab Manu Links *//
-      angular.module('sameTabMenuLinks', []).component('sameTabMenuLinks', {
-        bindings: {parentCtrl: '<'},
-        controller: function controller($document, $scope) {
-          this.$onInit = function() {
-                /*Must wait for menu items to appear*/
-                var elCheck = setInterval(updateLinks, 1000);
-                function updateLinks() {
-                  /* Checks for menu links, sets all target attributes to '_self'*/
-                  if( $document[0].querySelectorAll("div.top-nav-bar-links > div").length>0 ){
-                    var menuItems=$document[0].querySelectorAll("div.top-nav-bar-links > div")
-                    for (var i = 0; i < menuItems.length; i++) {
-                      var mItem = menuItems[i];
-                      var anchor = mItem.querySelector("div > a");
-                      anchor.target="_self"
-                    }
-                    clearInterval(elCheck);
-                  }
 
-                }
-
-              }
-        }
-      });
-      //* End Same Tab Manu Links *//
 })();
