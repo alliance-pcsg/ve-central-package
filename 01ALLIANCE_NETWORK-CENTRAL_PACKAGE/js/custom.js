@@ -1,7 +1,7 @@
 /*
 *
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2022-10-07
+*	Last updated: 2022-10-24
 *
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -18,6 +18,7 @@
 *   Hide Unwanted 856 Links (Added 2022-04-20)
 *   Show NZ and IZ MMS IDs (Added 2022-08-11)
 *   Set Focus on Hover in Send-To Menu (Added 2022-08-24)
+*   Same Tab Menu Links (Added 2022-10-24)
 */
 
 (function(){
@@ -1354,4 +1355,5 @@
       }
     })
   /* End Same Tab Menu Links */
+
 })();
