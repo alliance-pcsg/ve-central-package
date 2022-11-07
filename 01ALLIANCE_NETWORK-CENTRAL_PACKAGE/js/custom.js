@@ -487,7 +487,7 @@
           if (!(angular.isUndefined(item.delivery.holding) || item.delivery.holding === null) && item.delivery.holding.length > 0) {
 
             // Get VID
-            var vid = angular.uppercase($location.search().vid);
+            var vid = $location.search().vid.toUpperCase();
 
             // Get title
             var title = encodeURIComponent(item.pnx.display.title[0]);
