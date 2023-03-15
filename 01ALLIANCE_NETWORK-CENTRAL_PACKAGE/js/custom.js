@@ -1,12 +1,11 @@
 /*
 *
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2023-01-18
+*	Last updated: 2023-03-15
 *
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
 *   Custom model window for peer-review and open access badges (updated 2019-12-26)
-*   Toggle advanced search in mobile display (updated 2018-10-09)
 *   Enlarge Covers (Updated 2021-12-06)
 *   Text a Call Number (Updated 2022-11-07)
 *   External Search (Updated 2022-02-04)
@@ -29,6 +28,7 @@
   /* Placeholders for removed modules to prevent local packages from breaking */
   angular.module('toggleInstitutions', []);
   angular.module('showFavoritesWarning', []);
+  angular.module('toggleAdvancedFields', []);
 
   /* Custom action Begins */
   angular.module('customActions', []);
@@ -238,71 +238,6 @@
       }
     });
   // END Badges modal module
-
-  // Begin Toggle Advanced Fields module //
-  angular
-    .module('toggleAdvancedFields', [])
-    .component('toggleAdvancedFields', {
-      template: '<md-button class="md-raised" ng-click="$ctrl.toggleFields()" id="advancedFieldsButton" aria-controls="advancedFields" aria-expanded=false aria-label="Show/Hide Advanced Fields">{{$ctrl.advancedFieldsButtonLabel}}</md-button>',
-        controller: function ($scope, $window, advancedFieldsOptions) {
-          this.$onInit = function () {
-
-            // Declare button and field variables
-            this.button = angular.element(document.getElementById('advancedFieldsButton'));
-            this.fields = angular.element(document.querySelector('prm-advanced-search md-card:nth-child(2)'));
-            this.fields.attr('id', 'advancedFields');
-
-            // Show/hide button and fields on initialization and window resize
-            this.setInitDisplay();
-            if (advancedFieldsOptions.show_button_for == 'mobile') {
-              angular.element($window).bind('resize', function () {
-                $scope.$ctrl.setInitDisplay();
-              });
-            }
-          }
-
-          // Set initial display of button and fields based on default options and window size
-          this.setInitDisplay = function () {
-            if (advancedFieldsOptions.show_button_for == 'all' || $window.innerWidth < 600) {
-              this.showHideFields('hide');
-              this.button.removeClass('hide');
-            }
-            else {
-              this.showHideFields('show');
-              this.button.addClass('hide');
-            }
-          }
-
-          // Toggle fields on button click
-          this.toggleFields = function () {
-            this.fields.hasClass('hide') ? this.showHideFields('show') : this.showHideFields('hide');
-          }
-
-          // Show or hide fields
-          this.showHideFields = function (show_hide) {
-            switch (show_hide) {
-              case 'show':
-                this.fields.removeClass('hide');
-                this.advancedFieldsButtonLabel = advancedFieldsOptions.hide_label;
-                this.button.attr('aria-expanded', true);
-                break;
-              case 'hide':
-                this.fields.addClass('hide');
-                this.advancedFieldsButtonLabel = advancedFieldsOptions.show_label;
-                this.button.attr('aria-expanded', false);
-                break;
-            }
-          }
-      }
-    });
-    // Set default values for toggleAdvancedFields module
-    // show_button_for can be 'mobile' or 'all'
-    angular.module('toggleAdvancedFields').value('advancedFieldsOptions', {
-      show_button_for: 'mobile',
-      show_label: 'Show Additional Fields',
-      hide_label: 'Hide Additional Fields'
-    });
-  /* End toggle advanced fields */
 
   //*  Begin Enlarge covers   *//
   angular
