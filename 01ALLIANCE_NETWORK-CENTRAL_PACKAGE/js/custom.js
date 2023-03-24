@@ -1285,34 +1285,63 @@
                   var xmlDoc = parser.parseFromString(response.data,"text/xml");
                   var numRecords = xmlDoc.getElementsByTagName('numberOfRecords');
                   if (numRecords.length > 0) {
-                    var records = numRecords[0].textContent;
-                    // If no holdings, hide the form
-                    if (records == '0') {
-                      console.log('No NZ holdings for SRU query ' + query);
+                    var count = parseInt(numRecords[0].textContent);
+                    // If no records, hide the form
+                    if (count == 0) {
+                      console.log('No NZ records for SRU query ' + query);
                       vm.hide_form();
                     }
-                    // If holdings, list institutions
+                    // If records, go through each
                     else {
                       var institutions = [];
-                      var holdings = xmlDoc.getElementsByTagName('datafield');
-                      angular.forEach(holdings, function(datafield) {
-                        if (datafield.getAttribute('tag') == '852') {
-                          var subfields = datafield.getElementsByTagName('subfield');
-                          angular.forEach(subfields, function(subfield) {
-                            if (subfield.getAttribute('code') == 'a') {
-                              if (angular.isDefined(institution_codes[subfield.textContent])) {
-                                institutions.push(institution_codes[subfield.textContent]);
-                              }
+                      var recordData = xmlDoc.getElementsByTagName('recordData');
+                      for (var r = 0; r < recordData.length; r++) {
+                        var record = recordData[r];
+                        // Check LDR/06 and 008/23 or 29 for form of item
+                        var leader = record.getElementsByTagName('leader')[0].textContent;
+                        const maps_and_visuals = ['e','f','g','k','o'];
+                        var form_position, form_of_item;
+                        if (maps_and_visuals.includes(leader.substr(6, 1))) {
+                          form_position = 29;
+                        }
+                        else {
+                          form_position = 23;
+                        }
+                        var controlfields = record.getElementsByTagName('controlfield');
+                        for (var c = 0; c < controlfields.length; c++) {
+                          var controlfield = controlfields[c];
+                          if (controlfield.getAttribute('tag') == '008') {
+                            form_of_item = controlfield.textContent.substr(form_position, 1);
+                            break;
+                          }
+                        }
+                        // If online format, skip this record
+                        if (form_of_item == 'o') {
+                          continue;
+                        }
+                        // For other forms, get institution
+                        else {
+                          var datafields = record.getElementsByTagName('datafield');
+                          angular.forEach(datafields, function(datafield) {
+                            if (datafield.getAttribute('tag') == '852') {
+                              var subfields = datafield.getElementsByTagName('subfield');
+                              angular.forEach(subfields, function(subfield) {
+                                if (subfield.getAttribute('code') == 'a') {
+                                  if (angular.isDefined(institution_codes[subfield.textContent])) {
+                                    institutions.push(institution_codes[subfield.textContent]);
+                                  }
+                                }
+                              });
                             }
                           });
                         }
-                      });
+                      }
                       if (institutions.length > 0) {
                         vm.found_records = true;
                         vm.summit_list = institutions.join(', ');
                       }
                       else {
-                        console.log('No institutions found in SRU query ' + query);
+                        console.log('No physical holdings found in SRU query ' + query);
                         vm.hide_form();
                       }
                     }
