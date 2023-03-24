@@ -17,3 +17,4 @@ Then follow the documentation for the module(s) you wish to use.
 - [Hide Unwanted 856 Links](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/hide-856-links/)
 - [Show NZ and IZ MMS IDs](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/show-mms-ids/)
 - [Same Tab Menu Links](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/same-tab-menu-links/)
+- [Hide Resource Sharing Form for Titles with No Network Zone Holdings](https://www.orbiscascade.org/programs/systems/pcsg/primo-ve-toolkit/hide-summit/)
