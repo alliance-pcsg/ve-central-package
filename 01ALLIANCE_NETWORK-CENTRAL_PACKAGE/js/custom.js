@@ -1,7 +1,7 @@
 /*
 *
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2023-03-24
+*	Last updated: 2023-05-18
 *
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
@@ -18,6 +18,7 @@
 *   Set Focus on Hover in Send-To Menu (Added 2022-08-24)
 *   Same Tab Menu Links (Added 2022-10-24)
 *   Hide Summit Request Form (Added 2023-03-24)
+*   Advanced Search Publication Years (Added 2023-05-18)
 */
 
 (function(){
@@ -1388,5 +1389,73 @@
       }
     });
     /* End Hide Summit Form */
+    
+    // Start Publication year advanced field
+    angular
+      .module('addPubyearAdvsearch', [])
+      .component('addPubyearAdvsearch', {
+        template: '' +
+          '<div id="pubyear-dropdown" layout="row" flex="" layout-xs="column" class="layout-xs-column layout-row flex" "ng-if="$ctrl.showIt">' +
+          '<md-card class="advanced-drop-downs zero-margin marginless-inputs padded-container _md md-primoExplore-theme layout-column layout-align-start-start" layout="column" layout-align="start start" flex="">' +
+          '<div layout="column" class="layout-column">' +
+          '<md-input-container class="underlined-input md-primoExplore-theme md-input-has-value">' +
+          '<label>{{ formName }}</label>' +
+          '<md-select ng-model="$ctrl.selectedyear" ng-change="$ctrl.filter()">' +
+          '<md-option ng-repeat="year in years" ng-value="{{ year.yeardiff }}">{{ year.numyear }}</md-option>' +
+          '</md-select>' +
+          '</md-input-container>' +
+          '</div>' +
+          '</md-card>' +
+          '</div>',
+        controller: function ($scope, addPubyearAdvsearchOptions) {
+          this.$onInit = function () {
+            this.showIt = false;
+            if (angular.isDefined($scope.$parent.$parent)) {
+              var advsearch = $scope.$parent.$parent;
+              if (angular.isDefined(advsearch.$ctrl)) {
+                var search_ctrl = advsearch.$ctrl;
+                this.showIt = angular.isDefined(search_ctrl.advancedSearchService);
+                $scope.formName = addPubyearAdvsearchOptions.formName;
+                $scope.years = addPubyearAdvsearchOptions.pubyears;
+                this.filter = function (filter) {
+                  // md-select ng-model stores the current selected values
+                  // for example: ng-model=$ctrl.startDay.selection stores the start day
+                  try {
+                    var today = new Date();
+                    var today_year = today.getFullYear();
+                    search_ctrl.endYear = String(today_year);
+                    var startyear = today_year + this.selectedyear;
+                    search_ctrl.startYear = String(startyear);
+
+                    // The values all need to be strings, and the months need to have leading 0s
+                    // month and date have the same start and end values
+                    search_ctrl.endMonth.selection = String(today.getMonth() + 1).padStart(2, '0');
+                    search_ctrl.startMonth.selection = search_ctrl.endMonth.selection;
+                    search_ctrl.endDay.selection = String(today.getDate() + 1).padStart(2, '0');
+                    search_ctrl.startDay.selection = search_ctrl.endDay.selection;
+                    console.log('search_ctrl', search_ctrl);
+                  }
+                  catch (e) {
+                    console.log('Error: ' + e);
+                    return '';
+                  }
+                }
+              }
+            }
+          }
+        }
+      })
+      .value('addPubyearAdvsearchOptions', {
+        formName: 'Publication Year Range',
+        pubyears: [{
+            "numyear": "Last year",
+            "yeardiff": -1
+          },
+          {
+            "numyear": "Last two years",
+            "yeardiff": -2
+          }
+        ]
+      });
 
 })();
