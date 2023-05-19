@@ -1424,24 +1424,33 @@
                 this.filter = function (filter) {
                   // md-select ng-model stores the current selected values
                   // for example: ng-model=$ctrl.startDay.selection stores the start day
-                  try {
-                    var today = new Date();
-                    var today_year = today.getFullYear();
-                    search_ctrl.endYear = String(today_year);
-                    var startyear = today_year + this.selectedyear;
-                    search_ctrl.startYear = String(startyear);
-
-                    // The values all need to be strings, and the months need to have leading 0s
-                    // month and date have the same start and end values
-                    search_ctrl.endMonth.selection = String(today.getMonth() + 1).padStart(2, '0');
-                    search_ctrl.startMonth.selection = search_ctrl.endMonth.selection;
-                    search_ctrl.endDay.selection = String(today.getDate()).padStart(2, '0');
-                    search_ctrl.startDay.selection = search_ctrl.endDay.selection;
-                    console.log('search_ctrl', search_ctrl);
+                  if (this.selectedyear == 0) {
+                    search_ctrl.startDay.selection = 'start_day';
+                    search_ctrl.startMonth.selection = 'start_month';
+                    search_ctrl.startYear = '';
+                    search_ctrl.endDay.selection = 'end_day';
+                    search_ctrl.endMonth.selection = 'end_month';
+                    search_ctrl.endYear = '';
                   }
-                  catch (e) {
-                    console.log('Error: ' + e);
-                    return '';
+                  else {
+                    try {
+                      var today = new Date();
+                      var today_year = today.getFullYear();
+                      search_ctrl.endYear = String(today_year);
+                      var startyear = today_year + this.selectedyear;
+                      search_ctrl.startYear = String(startyear);
+
+                      // The values all need to be strings, and the months need to have leading 0s
+                      // month and date have the same start and end values
+                      search_ctrl.endMonth.selection = String(today.getMonth() + 1).padStart(2, '0');
+                      search_ctrl.startMonth.selection = search_ctrl.endMonth.selection;
+                      search_ctrl.endDay.selection = String(today.getDate()).padStart(2, '0');
+                      search_ctrl.startDay.selection = search_ctrl.endDay.selection;
+                    }
+                    catch (e) {
+                      console.log('Error: ' + e);
+                      return '';
+                    }
                   }
                 }
               }
@@ -1451,7 +1460,12 @@
       })
       .value('addPubyearAdvsearchOptions', {
         formName: 'Publication Year Range',
-        pubyears: [{
+        pubyears: [
+          {
+            "numyear": "Any years",
+            "yeardiff": 0
+          },
+          {
             "numyear": "Last year",
             "yeardiff": -1
           },
