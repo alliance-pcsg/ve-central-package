@@ -1395,7 +1395,7 @@
       .module('addPubyearAdvsearch', [])
       .component('addPubyearAdvsearch', {
         template: '' +
-          '<div id="pubyear-dropdown" layout="row" flex="" layout-xs="column" class="layout-xs-column layout-row flex" "ng-if="$ctrl.showIt">' +
+          '<div id="pubyear-dropdown" layout="row" flex="" layout-xs="column" class="layout-xs-column layout-row flex" ng-if="$ctrl.showIt()">' +
           '<md-card class="advanced-drop-downs zero-margin marginless-inputs padded-container _md md-primoExplore-theme layout-column layout-align-start-start" layout="column" layout-align="start start" flex="">' +
           '<div layout="column" class="layout-column">' +
           '<md-input-container class="underlined-input md-primoExplore-theme md-input-has-value">' +
@@ -1409,12 +1409,16 @@
           '</div>',
         controller: function ($scope, addPubyearAdvsearchOptions) {
           this.$onInit = function () {
-            this.showIt = false;
             if (angular.isDefined($scope.$parent.$parent)) {
               var advsearch = $scope.$parent.$parent;
               if (angular.isDefined(advsearch.$ctrl)) {
                 var search_ctrl = advsearch.$ctrl;
-                this.showIt = angular.isDefined(search_ctrl.advancedSearchService);
+                this.showIt = function() {
+                  if (angular.isDefined(search_ctrl.advancedSearchService)) {
+                    return !search_ctrl.advancedSearchCollapsed;
+                  }
+                  return false;
+                }
                 $scope.formName = addPubyearAdvsearchOptions.formName;
                 $scope.years = addPubyearAdvsearchOptions.pubyears;
                 this.filter = function (filter) {
@@ -1431,7 +1435,7 @@
                     // month and date have the same start and end values
                     search_ctrl.endMonth.selection = String(today.getMonth() + 1).padStart(2, '0');
                     search_ctrl.startMonth.selection = search_ctrl.endMonth.selection;
-                    search_ctrl.endDay.selection = String(today.getDate() + 1).padStart(2, '0');
+                    search_ctrl.endDay.selection = String(today.getDate()).padStart(2, '0');
                     search_ctrl.startDay.selection = search_ctrl.endDay.selection;
                     console.log('search_ctrl', search_ctrl);
                   }
