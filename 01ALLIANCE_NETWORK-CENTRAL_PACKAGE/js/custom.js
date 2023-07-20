@@ -1,11 +1,11 @@
 /*
 *
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2023-05-18
+*	Last updated: 2023-07-20
 *
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
-*   Custom model window for peer-review and open access badges (updated 2019-12-26)
+*   Custom model window for peer-review and open access badges (updated 2023-07-20)
 *   Enlarge Covers (Updated 2021-12-06)
 *   Text a Call Number (Updated 2022-11-07)
 *   External Search (Updated 2022-02-04)
@@ -210,6 +210,17 @@
               $scope.$ctrl.infoFile = badge.file;
             }
           });
+
+          // Move the badges after the icon and label container
+          let badges = document.querySelectorAll("prm-icon-after badges-modal button.badgeButton");
+          badges.forEach(myFunction);
+          function myFunction(badge) {
+            let myParent = badge.parentElement;
+            if (myParent.nodeName == "BADGES-MODAL") {
+              let myAncestor = myParent.parentElement.parentElement.parentElement;
+              myAncestor.after(badge);
+            }
+          }
         }
 
         // Badge info dialog
