@@ -1,13 +1,13 @@
 /*
 *
 *	Orbis Cascade Alliance Central Package
-*	Last updated: 2023-07-20
+*	Last updated: 2025-07-28
 *
 * Included customizations:
 *   Insert custom action (updated 2018-11-07)
 *   Custom model window for peer-review and open access badges (updated 2023-07-20)
 *   Enlarge Covers (Updated 2021-12-06)
-*   Text a Call Number (Updated 2022-11-07)
+*   Text a Call Number (Removed 2025-07-28)
 *   External Search (Updated 2022-02-04)
 *   Force Login (Added 2020-10-22)
 *   eShelf Links (Added 2020-11-03)
@@ -302,133 +302,13 @@
   angular
     .module('smsAction', [])
     .component('smsAction', {
-      require: {
-        prmActionCtrl: '^prmActionList'
-      },
-      controller: function controller($scope, $location, $http, $mdDialog, customActions, smsActionOptions) {
-        var _this = this;
+      controller: function controller() {
         this.$onInit = function () {
-
-          // Remove action if it exists from a previous record
-          customActions.removeAction({name: 'sms_action'}, _this.prmActionCtrl);
-
-          // Get item from control
-          var item = $scope.$ctrl.prmActionCtrl.item;
-
-          // If a holding is defined, add the action
-          if (!(angular.isUndefined(item.delivery.holding) || item.delivery.holding === null) && item.delivery.holding.length > 0) {
-
-            // Get VID
-            var vid = $location.search().vid.toUpperCase();
-
-            // Get title
-            var title = encodeURIComponent(item.pnx.display.title[0]);
-
-            // Get MMS ID
-            var mms_id = item.pnx.display.mms[0];
-
-            // Get holdings
-            var holdings = new Array();
-            for (var h = 0; h < item.delivery.holding.length; h++) {
-              var holding = item.delivery.holding[h];
-              holdings.push(holding.libraryCode + ';' + holding.subLocation.replace(/;/g,'%3B') + ';' + holding.callNumber);
-            }
-            var joined_holdings = encodeURIComponent(holdings.join('|'));
-
-            // If holdings were set successfully, add action
-            if (holdings.length > 0) {
-              _this.sms_action = {
-                name: 'sms_action',
-                label: smsActionOptions.label,
-                index: smsActionOptions.index,
-                icon: smsActionOptions.icon,
-                onToggle: _this.showSmsForm(vid, title, mms_id, joined_holdings)
-              };
-              customActions.addAction(_this.sms_action, _this.prmActionCtrl);
-            }
-          }
-        }
-
-        // SMS dialog
-        this.showSmsForm = function showSmsForm(vid, title, mms_id, joined_holdings) {
-          return function() {
-
-            // Get form asynchronously
-            $http({
-              method: "GET",
-              url: 'https://pcsg.orbiscascade.org/sms/form.php?vid=' + vid + '&title=' + title + '&holdings=' + joined_holdings + '&libraries=' + smsActionOptions.libraries
-            })
-            .then(
-              function(response) {
-                // Show dialog
-                $mdDialog.show({
-                  controller: smsFormController,
-                  template: '<md-dialog aria-label="' + smsActionOptions.label + '"><md-dialog-content><md-toolbar><div class="md-toolbar-tools"><h2 class="flex">' + smsActionOptions.label + '</h2><md-button class="md-icon-button" ng-click="closeSmsForm()"><md-tooltip>Close Window</md-tooltip><md-icon md-svg-icon="primo-ui:close" aria-label="Close form window"></md-button></div></md-toolbar><div id="smsFormContent" class="md-dialog-content">' + response.data + '</div></md-dialog-content></md-dialog>',
-                  clickOutsideToClose: true,
-                  escapeToClose: true
-                });
-              },
-              function(error_response) {
-                console.log(error_response);
-              }
-            );
-
-            function smsFormController($scope, $mdDialog) {
-
-              // Submit form asynchronously
-              $scope.sendText = function () {
-                if (!angular.isUndefined($scope.smsPhone) && !angular.isUndefined($scope.smsProvider)) {
-                  // Get note
-                  var smsNote = $scope.smsNote;
-                  if (angular.isUndefined(smsNote)) {
-                    smsNote = '';
-                  }
-                  // Get link option
-                  var smsLink = document.getElementById('smsLink').checked;
-                  // Get details
-                  var smsItemDetails = document.getElementById('smsItemDetails').value;
-                  // Send request
-                  $http({
-                    method: 'GET',
-                    url: 'https://pcsg.orbiscascade.org/sms/send.php?vid=' + vid + '&title=' + title + '&mms_id=' + mms_id + '&details=' + smsItemDetails + '&phone=' + $scope.smsPhone + '&provider=' + $scope.smsProvider + '&note=' + smsNote + '&include_link=' + smsLink
-                  })
-                  .then(
-                    // Display confirmation
-                    function(response) {
-                      document.getElementById('smsFormContent').innerHTML = response.data;
-                    },
-                    function(error_response) {
-                      console.log(error_response);
-                    }
-                  );
-                }
-                else {
-                  document.getElementById('smsError').style.display = "block";
-                }
-              };
-
-              // Close form
-              $scope.closeSmsForm = function () {
-                $mdDialog.hide();
-              };
-
-            }
-
-          };
+          console.log('The Text a Call Number customization for Primo is no longer supported.');
         }
       }
     })
-    .value('smsActionOptions', {
-      label: 'Text Call Number',
-      index: 0,
-      icon: {
-        icon: 'ic_textsms_24px',
-        iconSet: 'communication',
-        type: 'svg'
-      },
-      libraries: '',
-      institution: ''
-    });
+    .value('smsActionOptions', {});
   //* End Text a Call Number  *//
 
   //* Begin External Search *//
